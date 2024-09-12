@@ -3,7 +3,7 @@ package resource;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-//Testen für Github Commit Ariansch
+//Testen für Github Commit und Push Ariansch 
 public class ResourceServiceTest {
 
     private ResourceService resourceService;
