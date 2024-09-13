@@ -1,198 +1,120 @@
 package application;
 
+import person.*;
+import resource.*;
+
 import java.util.Scanner;
 
-import person.Person;
-import person.PersonFactory;
-import person.PersonService;
-import resource.AdditionalDriver;
-import resource.Car;
-import resource.ChildSeat;
-import resource.Navi;
-import resource.Resource;
-import resource.ResourceService;
-import resource.SetTopBox;
-import resource.TrailerHitch;
-
 public class Main {
-    private static PersonService personService = new PersonService();
-    private static ResourceService resourceService = new ResourceService();
-    private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        boolean exit = false;
-        while (!exit) {
-            printMainMenu();
-            int mainChoice = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
+        PersonService personService = new PersonService();
+        ResourceService resourceService = new ResourceService();
+        Scanner scanner = new Scanner(System.in);
+        boolean running = true;
 
-            switch (mainChoice) {
-                case 1: // Personenverwaltung
-                    handlePersonMenu();
+        // Erst Person erstellen
+        while (running) {
+            System.out.println("1. Person erstellen");
+            System.out.println("2. Ressourcen hinzufügen");
+            System.out.println("3. Ressourcen löschen");
+            System.out.println("4. Alle Personen anzeigen");
+            System.out.println("5. Alle Ressourcen anzeigen");
+            System.out.println("6. Beenden");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Verarbeitet Zeilenumbruch
+
+            switch (choice) {
+                case 1:
+                    // Erstellen der Person
+                    System.out.println("Geben Sie den Personentyp ein (1: NaturalPerson, 2: LegalPerson):");
+                    int personType = scanner.nextInt();
+                    scanner.nextLine();  // Verarbeitet Zeilenumbruch
+                    System.out.println("Geben Sie den Namen ein:");
+                    String name = scanner.nextLine();
+                    System.out.println("Geben Sie die Email ein:");
+                    String email = scanner.nextLine();
+                    System.out.println("Geben Sie die Telefonnummer ein:");
+                    String phoneNumber = scanner.nextLine();
+                    System.out.println("Geben Sie die Adresse ein:");
+                    String address = scanner.nextLine();
+
+                    if (personType == 1) {
+                        System.out.println("Geben Sie das Geburtsdatum ein (yyyy-MM-dd):");
+                        String birthDate = scanner.nextLine();
+                        personService.createPerson("NaturalPerson", name, email, phoneNumber, address, birthDate);
+                        System.out.println("Natürliche Person erstellt!");
+                    } else if (personType == 2) {
+                        System.out.println("Geben Sie den Firmennamen ein:");
+                        String companyName = scanner.nextLine();
+                        System.out.println("Geben Sie die Registrierungsnummer ein:");
+                        String registrationNumber = scanner.nextLine();
+                        System.out.println("Geben Sie die Steuernummer ein:");
+                        String taxNumber = scanner.nextLine();
+                        personService.createPerson("LegalPerson", name, email, phoneNumber, address, companyName, registrationNumber, taxNumber);
+                        System.out.println("Juristische Person erstellt!");
+                    }
                     break;
-                case 2: // Ressourcenverwaltung
-                    handleResourceMenu();
+
+                case 2:
+                    // Ressourcen hinzufügen (z.B. Auto)
+                    System.out.println("Geben Sie den Ressourcentyp ein (1: Car, 2: SetTopBox, 3: ChildSeat):");
+                    int resourceType = scanner.nextInt();
+                    System.out.println("Geben Sie die ID ein:");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();  // Verarbeitet Zeilenumbruch
+                    System.out.println("Geben Sie den Namen der Ressource ein:");
+                    String resourceName = scanner.nextLine();
+
+                    Resource resource = null;
+                    if (resourceType == 1) {
+                        resource = new Car(id, resourceName);
+
+                        // Option für ein Upgrade auf Luxusfahrzeug anbieten
+                        System.out.println("Möchten Sie ein Upgrade auf ein Luxusauto? (1: Ja, 0: Nein)");
+                        int upgradeChoice = scanner.nextInt();
+                        if (upgradeChoice == 1) {
+                            resource = new LuxuryCarDecorator(resource);
+                        }
+                    } else if (resourceType == 2) {
+                        resource = new SetTopBox(id, resourceName);
+                    } else if (resourceType == 3) {
+                        resource = new ChildSeat(id, resourceName);
+                    }
+
+                    if (resource != null) {
+                        resourceService.addResource(resource);
+                        System.out.println("Ressource hinzugefügt!");
+                    }
                     break;
-                case 3: // Beenden
-                    exit = true;
-                    System.out.println("Programm wird beendet.");
+
+                case 3:
+                    // Ressourcen löschen
+                    System.out.println("Geben Sie die ID der zu löschenden Ressource ein:");
+                    int deleteId = scanner.nextInt();
+                    resourceService.deleteResource(deleteId);
                     break;
+
+                case 4:
+                    // Alle Personen anzeigen
+                    personService.displayPersons();
+                    break;
+
+                case 5:
+                    // Alle Ressourcen anzeigen
+                    resourceService.displayResources();
+                    break;
+
+                case 6:
+                    running = false;
+                    break;
+
                 default:
-                    System.out.println("Ungültige Auswahl.");
+                    System.out.println("Ungültige Auswahl!");
             }
         }
-    }
 
-    private static void printMainMenu() {
-        System.out.println("Wählen Sie eine Option: ");
-        System.out.println("1. Personenverwaltung");
-        System.out.println("2. Ressourcenverwaltung");
-        System.out.println("3. Beenden");
-        System.out.print("Ihre Auswahl: ");
-    }
-
-    // Methoden zur Personenverwaltung
-    private static void handlePersonMenu() {
-        System.out.println("Wählen Sie eine Option:");
-        System.out.println("1. Person hinzufügen");
-        System.out.println("2. Person löschen");
-        System.out.println("3. Alle Personen anzeigen");
-        System.out.println("4. Zurück zum Hauptmenü");
-
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline character
-
-        switch (choice) {
-            case 1:
-                System.out.println("Geben Sie den Personentyp ein (natural/legal): ");
-                String type = scanner.nextLine();
-
-                System.out.println("Geben Sie den Namen ein: ");
-                String name = scanner.nextLine();
-
-                System.out.println("Geben Sie die Adresse ein: ");
-                String address = scanner.nextLine();
-
-                String extraInfo1 = "", extraInfo2 = "";
-                if ("natural".equalsIgnoreCase(type)) {
-                    System.out.println("Geben Sie das Geburtsdatum ein: ");
-                    extraInfo1 = scanner.nextLine();
-
-                    System.out.println("Geben Sie die Führerscheinnummer ein: ");
-                    extraInfo2 = scanner.nextLine();
-                } else if ("legal".equalsIgnoreCase(type)) {
-                    System.out.println("Geben Sie die Handelsregisternummer ein: ");
-                    extraInfo1 = scanner.nextLine();
-                    System.out.println("Geben Sie die Steuernummer ein: ");
-                    extraInfo2 = scanner.nextLine();
-                }
-
-                Person person = PersonFactory.createPerson(type, name, address, extraInfo1, extraInfo2);
-                if (person != null) {
-                    personService.addPerson(person);
-                    System.out.println("Person hinzugefügt: " + person.getName());
-                } else {
-                    System.out.println("Ungültiger Personentyp!");
-                }
-                break;
-            case 2:
-                System.out.println("Geben Sie den Namen der zu löschenden Person ein: ");
-                String nameToDelete = scanner.nextLine();
-                personService.deletePerson(nameToDelete);
-                System.out.println("Person gelöscht (falls vorhanden).");
-                break;
-            case 3:
-                System.out.println("Aktuelle Personen:");
-                personService.displayPersons();
-                break;
-            case 4:
-                return; // Zurück zum Hauptmenü
-            default:
-                System.out.println("Ungültige Auswahl.");
-        }
-    }
-
-    // Methoden zur Ressourcenverwaltung
-    private static void handleResourceMenu() {
-        System.out.println("Wählen Sie eine Option:");
-        System.out.println("1. Ressource hinzufügen");
-        System.out.println("2. Ressource löschen");
-        System.out.println("3. Alle Ressourcen anzeigen");
-        System.out.println("4. Zurück zum Hauptmenü");
-
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline character
-
-        switch (choice) {
-            case 1:
-                System.out.println("Geben Sie die Ressource ein (car, childseat, settopbox): ");
-                String resourceType = scanner.nextLine();
-
-                Resource resource;
-                switch (resourceType.toLowerCase()) {
-                    case "car":
-                        resource = new Car();
-                        break;
-                    case "childseat":
-                        resource = new ChildSeat(new Car());
-                        break;
-                    case "settopbox":
-                        resource = new SetTopBox(new Car());
-                        break;
-                    default:
-                        System.out.println("Ungültiger Ressourcentyp!");
-                        return;
-                }
-
-                System.out.println("Möchten Sie zusätzliche Optionen hinzufügen (navi, trailerhitch, additionaldriver)? (y/n)");
-                String addOptions = scanner.nextLine();
-
-                if (addOptions.equalsIgnoreCase("y")) {
-                    System.out.println("Geben Sie die gewünschten Optionen ein (navi, trailerhitch, additionaldriver): ");
-                    String option = scanner.nextLine();
-                    switch (option.toLowerCase()) {
-                        case "navi":
-                            resource = new Navi(resource);
-                            break;
-                        case "trailerhitch":
-                            resource = new TrailerHitch(resource);
-                            break;
-                        case "additionaldriver":
-                            System.out.println("Geben Sie das Alter des zusätzlichen Fahrers ein: ");
-                            int age = scanner.nextInt();
-                            scanner.nextLine(); // consume newline
-                            resource = new AdditionalDriver(resource, age);
-                            break;
-                        default:
-                            System.out.println("Ungültige Option!");
-                            return;
-                    }
-                }
-
-                resourceService.addResource(resource);
-                System.out.println("Ressource hinzugefügt: " + resource.getDescription());
-                break;
-            case 2:
-                System.out.println("Geben Sie die ID der Ressource ein, die Sie löschen möchten: ");
-                String resourceID = scanner.nextLine();
-                Resource resourceToDelete = resourceService.getSelectedResource(resourceID);
-                if (resourceToDelete != null) {
-                    resourceService.removeResource(resourceToDelete);
-                    System.out.println("Ressource gelöscht: " + resourceToDelete.getDescription());
-                } else {
-                    System.out.println("Ressource mit dieser ID nicht gefunden.");
-                }
-                break;
-            case 3:
-                System.out.println("Aktuelle Ressourcen:");
-                for (Resource res : resourceService.getResources()) {
-                    System.out.println(res.getDescription() + " kostet: " + res.getCost());
-                }
-                break;
-            case 4:
-                return; // Zurück zum Hauptmenü
-            default:
-                System.out.println("Ungültige Auswahl.");
-        }
+        scanner.close();
     }
 }
