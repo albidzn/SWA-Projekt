@@ -1,5 +1,8 @@
 package statistics;
 
+import booking.EnglishBooking;
+import booking.GermanBooking;
+
 // Concrete Visitor for Payments
 public class PaymentTypeVisitor implements BookingVisitor {
     private String paymentType; // Zahlungsart 

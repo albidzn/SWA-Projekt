@@ -1,5 +1,7 @@
 package statistics;
 
+import booking.EnglishBooking;
+import booking.GermanBooking;
 
 //Das Visitor Interface
 public interface BookingVisitor {

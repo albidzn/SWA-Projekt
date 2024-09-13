@@ -1,7 +1,10 @@
 package statistics;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
+
+import booking.Booking;
 
 public class StatisticsService {
     private List<Booking> bookings;
@@ -10,21 +13,28 @@ public class StatisticsService {
         this.bookings = bookings;
     }
 
-    public void getGermanBookingsPaidBy(String paymentType) {
-        BookingVisitor visitor = new PaymentTypeVisitor(paymentType);
+    public List<Booking> getBookingsPaidBy(String paymentType) {
+        BookingPaymentVisitor visitor = new BookingPaymentVisitor(paymentType);
         for (Booking booking : bookings) {
-            if (booking instanceof GermanBooking) {
-                booking.accept(visitor);
-            }
+            booking.accept(visitor);  // Jede Buchung akzeptiert den Visitor
         }
+        return visitor.getFilteredBookings();
     }
 
-    public void getEnglishBookingsPaidBy(String paymentType) {
-        BookingVisitor visitor = new PaymentTypeVisitor(paymentType);
+    // Neue Methode für die Zusammenfassung der Statistiken
+    public void displayStatistics() {
+        // Map zur Speicherung der Anzahl der Buchungen pro Zahlungsart
+        Map<String, Integer> paymentStats = new HashMap<>();
+
         for (Booking booking : bookings) {
-            if (booking instanceof EnglishBooking) {
-                booking.accept(visitor);
-            }
+            String paymentType = booking.getPaymentType();
+            paymentStats.put(paymentType, paymentStats.getOrDefault(paymentType, 0) + 1);
+        }
+
+        // Statistiken ausgeben
+        System.out.println("\nZusammenfassung der Buchungen nach Zahlungsart:");
+        for (Map.Entry<String, Integer> entry : paymentStats.entrySet()) {
+            System.out.println("Zahlungsart: " + entry.getKey() + " - Anzahl der Buchungen: " + entry.getValue());
         }
     }
 }

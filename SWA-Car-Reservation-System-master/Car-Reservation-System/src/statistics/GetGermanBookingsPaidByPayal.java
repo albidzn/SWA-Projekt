@@ -1,5 +1,8 @@
 package statistics;
 
+import booking.EnglishBooking;
+import booking.GermanBooking;
+
 // Use Case für deutsche Buchungen, die mit PayPal bezahlt wurden
 public class GetGermanBookingsPaidByPayPal implements BookingVisitor {
     

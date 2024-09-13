@@ -3,8 +3,8 @@ package statistics;
 import booking.EnglishBooking;
 import booking.GermanBooking;
 
-// Concrete Visitor für englische Buchungen, die mit GoogleWallet bezahlt wurden
-public class GetEnglishBookingsPaidByGoogleWallet implements BookingVisitor {
+// Concrete Visitor für englische Buchungen, die mit MoneyWallet bezahlt wurden
+public class GetEnglishBookingsPaidByMoneyWallet implements BookingVisitor {
 
     @Override
     public void visit(GermanBooking germanBooking) {
@@ -13,9 +13,9 @@ public class GetEnglishBookingsPaidByGoogleWallet implements BookingVisitor {
 
     @Override
     public void visit(EnglishBooking englishBooking) {
-        // Prüfen, ob die englische Buchung mit GoogleWallet bezahlt wurde
-        if (englishBooking.getPaymentType().equals("GoogleWallet")) {
-            System.out.println("Processing English booking paid by GoogleWallet");
+        // Prüfen, ob die englische Buchung mit MoneyWallet bezahlt wurde
+        if (englishBooking.getPaymentType().equals("MoneyWallet")) {
+            System.out.println("Processing English booking paid by MoneyWallet");
             // Hier könnte weitere Logik folgen, wie das Sammeln von Statistiken
         }
     }

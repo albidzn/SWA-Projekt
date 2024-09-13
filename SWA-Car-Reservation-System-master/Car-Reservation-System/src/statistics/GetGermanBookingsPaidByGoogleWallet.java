@@ -1,5 +1,8 @@
 package statistics;
 
+import booking.EnglishBooking;
+import booking.GermanBooking;
+
 // Use Case für deutsche Buchungen, die mit GoogleWallet bezahlt wurden
 public class GetGermanBookingsPaidByGoogleWallet implements BookingVisitor {
 
