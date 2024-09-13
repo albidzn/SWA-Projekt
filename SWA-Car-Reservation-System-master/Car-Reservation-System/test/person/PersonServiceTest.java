@@ -15,14 +15,16 @@ public class PersonServiceTest {
 
 	@Test
 	public void testCreateNaturalPerson() {
-		Person person = personService.createPerson("NaturalPerson", "Thomas Slotos", "thomas.slotos@leuphana.de",
+		Person person = personService.createPerson("NaturalPerson", "Thomas",  "Slotos", "thomas.slotos@leuphana.de",
 				"123456789", "Main Street", "2006-01-01");
 		assertNotNull(person);
 		assertTrue(person instanceof NaturalPerson);
-		assertEquals("Thomas Slotos", person.getName());
+		assertEquals("Thomas", person.getFname());
+		assertEquals("Slotos", person.getLname());
 
 		System.out.println("Erstellte NaturalPerson: ");
-		System.out.println("Name: " + person.getName());
+		System.out.println("Vorname: " + person.getFname());
+		System.out.println("Nachname: " + person.getLname());
 		System.out.println("Email: " + person.getEmail());
 		System.out.println("Telefonnummer: " + person.getPhoneNumber());
 		System.out.println("Adresse: " + person.getAddress());
@@ -35,14 +37,16 @@ public class PersonServiceTest {
 
 	@Test
 	public void testCreateLegalPerson() {
-		Person person = personService.createPerson("LegalPerson", "AAMS GmbH", "kontakt@aams.com", "00491234567",
+		Person person = personService.createPerson("LegalPerson", "Ariansch", "Kakkar", "kontakt@aams.com", "00491234567",
 				"Leuphana Straße", "AAMS GmbH", "123456", "1234567890123");
 		assertNotNull(person);
 		assertTrue(person instanceof LegalPerson);
-		assertEquals("AAMS GmbH", person.getName());
-
+		assertEquals("Ariansch", person.getFname());
+		assertEquals("Kakkar", person.getLname());
+		
 		System.out.println("Erstellte LegalPerson: ");
-		System.out.println("Name: " + person.getName());
+		System.out.println("Vorname: " + person.getFname());
+		System.out.println("Nachname: " + person.getLname());
 		System.out.println("Email: " + person.getEmail());
 		System.out.println("Telefonnummer: " + person.getPhoneNumber());
 		System.out.println("Adresse: " + person.getAddress());
@@ -56,18 +60,18 @@ public class PersonServiceTest {
 
 	@Test
 	public void testDeletePerson() {
-		personService.createPerson("NaturalPerson", "Thomas Slotos", "thomas.slotos@leuphana.de", "123456789",
-				"Main Street", "2006-01-01");
-		personService.deletePerson("Thomas Slotos");
+		personService.createPerson("NaturalPerson", "Thomas",  "Slotos", "thomas.slotos@leuphana.de",
+				"123456789", "Main Street", "2006-01-01");
+		personService.deletePerson("Thomas", "Slotos");
 		assertTrue(personService.getPersons().isEmpty()); // Überprüft, ob die Liste leer ist
 	}
 
 	@Test
 	public void testDisplayPersons() {
-		personService.createPerson("NaturalPerson", "Thomas Slotos", "thomas.slotos@leuphana.de", "123456789",
-				"Main Street", "2006-01-01");
-		personService.createPerson("LegalPerson", "AAMS GmbH", "kontakt@aams.com", "00491234567", "Leuphana Straße",
-				"AAMS GmbH", "123456", "1234567890123");
+		personService.createPerson("NaturalPerson", "Thomas",  "Slotos", "thomas.slotos@leuphana.de",
+				"123456789", "Main Street", "2006-01-01");
+		personService.createPerson("LegalPerson", "Ariansch", "Kakkar", "kontakt@aams.com", "00491234567",
+				"Leuphana Straße", "AAMS GmbH", "123456", "1234567890123");
 
 		assertEquals(2, personService.getPersons().size()); // Überprüft, ob zwei Personen erstellt wurden
 

@@ -7,9 +7,9 @@ public class LegalPerson extends Person {
 								// zumÜberprüfen implementieren
 //GmbH AG haben Handelsregister.
 
-	public LegalPerson(String name, String email, String phoneNumber, String address, String companyName,
+	public LegalPerson(String fname, String lname, String email, String phoneNumber, String address, String companyName,
 			String registrationNumber, String taxNumber) {
-		super(name, email, phoneNumber, address); // Übergabe aller erforderlichen Parameter an den Superkonstruktor
+		super(fname, lname, email, phoneNumber, address); // Übergabe aller erforderlichen Parameter an den Superkonstruktor
 		this.companyName = companyName;
 		this.registrationNumber = registrationNumber;
 		this.taxNumber = taxNumber;

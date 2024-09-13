@@ -13,8 +13,8 @@ public class NaturalPerson extends Person {
 	// private String driverLicenseExpireDate; //Kann muss nicht, (mehr sicherhehit)
 
 	// Constructor
-	public NaturalPerson(String name, String email, String phoneNumber, String address, String birthDate) {
-		super(name, email, phoneNumber, address); // Übergibt alle notwendigen Parameter an den Superkonstruktor
+	public NaturalPerson(String fname, String lname, String email, String phoneNumber, String address, String birthDate) {
+		super(fname, lname, email, phoneNumber, address); // Übergibt alle notwendigen Parameter an den Superkonstruktor
 		this.birthDate = birthDate;
 		// this.driverLicenseNumber = driverLicenseNumber;
 	}
@@ -43,6 +43,6 @@ public class NaturalPerson extends Person {
 
 	@Override
 	public String getPersonType() {
-		return "Natural Person / Natürliche Person ";
+		return "Natural Person / Natürliche Person";
 	}
 }
