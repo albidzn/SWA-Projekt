@@ -13,6 +13,6 @@ public class ChildSeat extends Resource {
 
     @Override
     public double getPrice() {
-        return 50.0; // Beispielpreis
+        return 15.0; // Beispielpreis
     }
 }

@@ -18,7 +18,5 @@ public class BenzinDecorator extends ResourceDecorator {
 		// TODO Auto-generated method stub
 		return super.getPrice() + 0.00;
 	}
-	
-	
 
 }

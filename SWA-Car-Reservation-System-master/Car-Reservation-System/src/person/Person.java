@@ -5,7 +5,7 @@ public abstract class Person {
     protected String email;
     protected String phoneNumber;
     protected String address;   
-    //protected String birthDate; TODO #3 sollte nicht jede Person es angeben müssen?
+    
 
     // Konstruktor für gemeinsame Attribute
     public Person(String name, String email, String phoneNumber, String address) {
@@ -46,6 +46,11 @@ public abstract class Person {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+    
+    //Gibt Details der Person aus
+    public String getPersonDetails() {
+    	return "Name: " + name + "\nEmail: " + email + "\nPhone Number : " + phoneNumber + "\nAdress: " + address;
     }
 
     //Abstrakte Methode, die in den Unterklassen implementiert werden muss
