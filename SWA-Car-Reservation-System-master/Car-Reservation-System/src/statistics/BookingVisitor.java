@@ -1,5 +1,12 @@
 package statistics;
 
-public class BookingVisitor {
 
+//Das Visitor Interface
+public interface BookingVisitor {
+ void visit(GermanBooking germanBooking);
+ void visit(EnglishBooking englishBooking);
 }
+
+
+
+
