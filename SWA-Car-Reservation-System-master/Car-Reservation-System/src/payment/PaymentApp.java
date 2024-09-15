@@ -9,7 +9,6 @@ public class PaymentApp {
 		boolean exit = false;
 
 		while (!exit) {
-			// Textbasiertes Menü
 			System.out.println("\n===== Zahlungsmenü =====");
 			System.out.println("1. Zahlung mit PayPal");
 			System.out.println("2. Zahlung mit Google Wallet");
@@ -17,7 +16,7 @@ public class PaymentApp {
 			System.out.println("4. Beenden");
 			System.out.print("Wählen Sie eine Option: ");
 			int choice = scanner.nextInt();
-			scanner.nextLine(); // Verarbeite Zeilenumbruch
+			scanner.nextLine();
 
 			PaymentType paymentType;
 
@@ -40,14 +39,12 @@ public class PaymentApp {
 				continue;
 			}
 
-			// Verarbeite die Zahlung basierend auf der gewählten Zahlungsmethode
 			handlePayment(scanner, paymentType);
 		}
 
 		scanner.close();
 	}
 
-	// Methode zur Verarbeitung der Zahlung
 	private static void handlePayment(Scanner scanner, PaymentType paymentType) {
 		System.out.print("Geben Sie den Namen des Senders ein: ");
 		String senderName = scanner.nextLine();
@@ -63,20 +60,17 @@ public class PaymentApp {
 
 		System.out.print("Geben Sie den Betrag ein: ");
 		double amount = scanner.nextDouble();
-		scanner.nextLine(); // Verarbeite Zeilenumbruch
+		scanner.nextLine();
 
 		System.out.print("Geben Sie die Währung ein (z.B. EUR, USD): ");
 		String currency = scanner.nextLine();
 		CurrencyAmount currencyAmount = new CurrencyAmount(amount, currency);
 
-		// Wähle den PaymentService basierend auf dem PaymentType
 		PaymentService paymentService = getPaymentService(paymentType);
 
-		// Zahlung durchführen
 		paymentService.payAmount(sender, receiver, currencyAmount);
 	}
 
-	// Liefert den PaymentService basierend auf dem PaymentType
 	private static PaymentService getPaymentService(PaymentType paymentType) {
 		switch (paymentType) {
 		case PAYPAL:
@@ -84,7 +78,7 @@ public class PaymentApp {
 		case GOOGLE_WALLET:
 			return new GoogleWalletPaymentService();
 		case MOBILE_MONEY_WALLET:
-			return new MobileMoneyPaymentService(); // Annahme: Diese Klasse musst du noch implementieren
+			return new MobileMoneyPaymentService();
 		default:
 			throw new IllegalArgumentException("Ungültige Zahlungsmethode");
 		}

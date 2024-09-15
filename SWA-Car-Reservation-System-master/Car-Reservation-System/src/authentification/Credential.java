@@ -7,18 +7,15 @@ public class Credential {
     private String fingerPrint;
     private String eyeScan;
 
-    // Konstruktor für Benutzername und Passwort
     public Credential(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    // Konstruktor für Fingerabdruck
     public Credential(String fingerPrint) {
         this.fingerPrint = fingerPrint;
     }
 
-    // Konstruktor für EyeScan
     public Credential(String eyeScan, boolean isEyeScan) {
         if (isEyeScan) {
             this.eyeScan = eyeScan;

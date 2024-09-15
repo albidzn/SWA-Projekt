@@ -3,7 +3,7 @@ package authentification;
 
 public class Subject {
 	private String id;
-	private String type; // "Person" oder "System"
+	private String type;
 
 	public Subject(String id, String type) {
 		this.id = id;
