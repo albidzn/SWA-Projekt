@@ -3,13 +3,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import payment.Account;
-import payment.CurrencyAmount;
-import payment.GoogleWalletPaymentService;
-import payment.MobileMoneyPaymentService;
-import payment.PayPalPaymentService;
-import payment.PaymentService;
-
 public class PaymentServiceTest {
 
 	@Test
