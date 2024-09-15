@@ -1,29 +1,40 @@
 package booking;
 
-public class GermanBooking implements Booking{
+import statistics.BookingVisitor;
 
-	@Override
-	public String createHead() {
-		return "Buchungskopf (Deutsch): Ihre Reservierungsdetails";
-	}
+public class GermanBooking implements Booking {
+    private String paymentMethod;
 
-	@Override
-	public String createBody() {
-		return "Buchungstext (Deutsch): Sie haben ein Fahrzeug reserviert.";
-	}
-
-	@Override
-	public String createFooter() {
-		return "Buchungsfußzeile (Deutsch): Vielen Dank für Ihre Buchung.";
-	}
-	
-    @Override
-    public String formatVehicleDetails(Fahrzeug vehicle, PriceDetails priceDetails) {
-        return "Fahrzeug: " + vehicle.getKategorie() + " - " + vehicle.getModell() + "\n" +
-               "Automatik: " + vehicle.isAutomatik() + "\n" +
-               "Klimaanlage: " + vehicle.isKlimaanlage() + "\n" +
-               "Navigationssystem: " + vehicle.isNavigationssystem() + "\n" +
-               "Preis: " + priceDetails.berechneGesamtpreis() + " Euro";
+    public GermanBooking(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    @Override
+    public String createHead() {
+        return "Deutsche Buchungskopfzeile";
+    }
+
+    @Override
+    public String createBody() {
+        return "Deutscher Buchungstext";
+    }
+
+    @Override
+    public String createFooter() {
+        return "Deutsche Buchungsfußzeile";
+    }
+
+    @Override
+    public String formatVehicleDetails(Fahrzeug vehicle, PriceDetails priceDetails) {
+        return "Fahrzeugdetails für deutsche Buchung: " + vehicle.getDetails() + ", Preis: " + priceDetails.getPrice();
+    }
+
+    @Override
+    public void accept(BookingVisitor visitor) {
+        visitor.visit(this);
+    }
 }

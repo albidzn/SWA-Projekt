@@ -1,60 +1,86 @@
 package statistics;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import booking.Booking;
 import booking.EnglishBooking;
 import booking.GermanBooking;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import statistics.StatisticsService;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.junit.Assert.assertEquals;
 
 public class StatisticsServiceTest {
 
-    private List<Booking> bookings;
+    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
+
     private StatisticsService statisticsService;
 
-    @BeforeEach
+    @Before
     public void setUp() {
-        // Beispielbuchungen einrichten
-        bookings = new ArrayList<>();
-        bookings.add(new GermanBooking("PayPal"));
-        bookings.add(new EnglishBooking("GoogleWallet"));
-        bookings.add(new GermanBooking("MoneyWallet"));
-        bookings.add(new EnglishBooking("MoneyWallet"));
+        statisticsService = new StatisticsService();
+        // Um die Konsolenausgabe aufzuzeichnen
+        System.setOut(new PrintStream(outputStream));
+    }
 
-        statisticsService = new StatisticsService(bookings);
+    @After
+    public void tearDown() {
+        // Setze die Standardausgabe wieder zurück
+        System.setOut(originalOut);
     }
 
     @Test
-    public void testGetGermanBookingsPaidByPayPal() {
-        // Teste das Abrufen von Buchungen in deutscher Sprache, die mit PayPal bezahlt wurden
-        statisticsService.getGermanBookingsPaidBy("PayPal");
-        // Hier würdest du die Ausgabe oder das Verhalten der Methode prüfen
-        assertTrue(bookings.get(0).getPaymentType().equals("PayPal"));
+    public void testVisitGermanBookingWithPayPal() {
+        GermanBooking germanBooking = new GermanBooking("PayPal");
+        statisticsService.visit(germanBooking);
+
+        String expectedOutput = "Deutsche Buchungskopfzeile\n" +
+                                "Deutscher Buchungstext\n" +
+                                "Deutsche Buchungsfußzeile\n" +
+                                "Deutsche Buchungen, die mit PayPal bezahlt wurden.\n";
+
+        assertEquals(expectedOutput, outputStream.toString());
     }
 
     @Test
-    public void testGetEnglishBookingsPaidByGoogleWallet() {
-        // Teste das Abrufen von englischen Buchungen, die mit Google Wallet bezahlt wurden
-        statisticsService.getEnglishBookingsPaidBy("GoogleWallet");
-        assertTrue(bookings.get(1).getPaymentType().equals("GoogleWallet"));
+    public void testVisitGermanBookingWithGoogleWallet() {
+        GermanBooking germanBooking = new GermanBooking("GoogleWallet");
+        statisticsService.visit(germanBooking);
+
+        String expectedOutput = "Deutsche Buchungskopfzeile\n" +
+                                "Deutscher Buchungstext\n" +
+                                "Deutsche Buchungsfußzeile\n" +
+                                "Deutsche Buchungen, die mit GoogleWallet bezahlt wurden.\n";
+
+        assertEquals(expectedOutput, outputStream.toString());
     }
 
     @Test
-    public void testGetGermanBookingsPaidByMoneyWallet() {
-        // Teste das Abrufen von deutschen Buchungen, die mit MoneyWallet bezahlt wurden
-        statisticsService.getGermanBookingsPaidBy("MoneyWallet");
-        assertTrue(bookings.get(2).getPaymentType().equals("MoneyWallet"));
+    public void testVisitEnglishBookingWithPayPal() {
+        EnglishBooking englishBooking = new EnglishBooking("PayPal");
+        statisticsService.visit(englishBooking);
+
+        String expectedOutput = "English Booking Header\n" +
+                                "English Booking Body\n" +
+                                "English Booking Footer\n" +
+                                "Englische Buchungen, die mit PayPal bezahlt wurden.\n";
+
+        assertEquals(expectedOutput, outputStream.toString());
     }
 
     @Test
-    public void testGetEnglishBookingsPaidByMoneyWallet() {
-        // Teste das Abrufen von englischen Buchungen, die mit MoneyWallet bezahlt wurden
-        statisticsService.getEnglishBookingsPaidBy("MoneyWallet");
-        assertTrue(bookings.get(3).getPaymentType().equals("MoneyWallet"));
+    public void testVisitEnglishBookingWithMoneyWallet() {
+        EnglishBooking englishBooking = new EnglishBooking("MoneyWallet");
+        statisticsService.visit(englishBooking);
+
+        String expectedOutput = "English Booking Header\n" +
+                                "English Booking Body\n" +
+                                "English Booking Footer\n" +
+                                "Englische Buchungen, die mit MoneyWallet bezahlt wurden.\n";
+
+        assertEquals(expectedOutput, outputStream.toString());
     }
 }

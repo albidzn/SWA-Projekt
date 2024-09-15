@@ -1,28 +1,40 @@
 package booking;
 
+import statistics.BookingVisitor;
+
 public class EnglishBooking implements Booking {
+    private String paymentMethod;
 
-	@Override
-	public String createHead() {
-		return "Booking Head (English): Your reservation details";
-	}
+    public EnglishBooking(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
 
-	@Override
-	public String createBody() {
-		return "Booking Body (English): You have reserved a vehicle.";
-	}
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
 
-	@Override
-	public String createFooter() {
-		return "Booking Footer (English): Thank you for your reservation.";
-	}
-	
+    @Override
+    public String createHead() {
+        return "English Booking Header";
+    }
+
+    @Override
+    public String createBody() {
+        return "English Booking Body";
+    }
+
+    @Override
+    public String createFooter() {
+        return "English Booking Footer";
+    }
+
     @Override
     public String formatVehicleDetails(Fahrzeug vehicle, PriceDetails priceDetails) {
-        return "Vehicle: " + vehicle.getKategorie() + " - " + vehicle.getModell() + "\n" +
-               "Automatic: " + vehicle.isAutomatik() + "\n" +
-               "Air Conditioning: " + vehicle.isKlimaanlage() + "\n" +
-               "Navigation System: " + vehicle.isNavigationssystem() + "\n" +
-               "Price: " + priceDetails.berechneGesamtpreis() + " EUR";
+        return "Vehicle details for English booking: " + vehicle.getDetails() + ", Price: " + priceDetails.getPrice();
+    }
+
+    @Override
+    public void accept(BookingVisitor visitor) {
+        visitor.visit(this);
     }
 }

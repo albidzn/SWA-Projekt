@@ -1,6 +1,6 @@
 package advertising;
 
-public class AdvertisingSystem implements Observer{
+public class AdvertisingSystem implements Observer {
 	
 	private MessagingSystem messagingSystem;
 	

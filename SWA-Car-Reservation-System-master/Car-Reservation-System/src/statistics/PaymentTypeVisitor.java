@@ -13,7 +13,7 @@ public class PaymentTypeVisitor implements BookingVisitor {
     
     @Override
     public void visit(GermanBooking germanBooking) {
-        if (germanBooking.getPaymentType().equals(paymentType)) {
+        if (germanBooking.getPaymentMethod().equals(paymentType)) {
             System.out.println("Processing German booking paid by " + paymentType);
             // Statistiken für deutsche Buchung berechnen
         }
@@ -21,7 +21,7 @@ public class PaymentTypeVisitor implements BookingVisitor {
 
     @Override
     public void visit(EnglishBooking englishBooking) {
-        if (englishBooking.getPaymentType().equals(paymentType)) {
+        if (englishBooking.getPaymentMethod().equals(paymentType)) {
             System.out.println("Processing English booking paid by " + paymentType);
             // Statistiken für englische Buchung berechnen
         }
