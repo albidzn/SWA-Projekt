@@ -1,5 +1,6 @@
 package resource;
 
+////Ausstattung: Kraftstoff
 public class BenzinDecorator extends ResourceDecorator {
 
 	public BenzinDecorator(Resource resource) {

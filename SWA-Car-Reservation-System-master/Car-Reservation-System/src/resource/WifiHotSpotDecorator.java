@@ -1,5 +1,5 @@
 package resource;
-
+//Ausstattung: WLAN im Auto
 public class WifiHotSpotDecorator extends ResourceDecorator {
 	public WifiHotSpotDecorator(Resource resource) {
 		super(resource);

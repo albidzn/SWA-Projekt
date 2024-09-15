@@ -4,19 +4,14 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeParseException;
 
-// Annahme, dass es den Privatkunden repräsentiert
+// Privatkunden repräsentiert
 public class NaturalPerson extends Person {
 	private String birthDate; // Birth date of the person, die Person sollte mindestens 18 Jahre alt sein!
-	// private String driverLicenseNumber; // Führerscheinnummer, wahrscheinlich
-	// quatsch. Unsicher
-	// private String driverLicenseDate; kann man streichen
-	// private String driverLicenseExpireDate; //Kann muss nicht, (mehr sicherhehit)
 
 	// Constructor
 	public NaturalPerson(String fname, String lname, String email, String phoneNumber, String address, String birthDate) {
 		super(fname, lname, email, phoneNumber, address); // Übergibt alle notwendigen Parameter an den Superkonstruktor
 		this.birthDate = birthDate;
-		// this.driverLicenseNumber = driverLicenseNumber;
 	}
 
 	// Überprüfen, ob die Person mindestens 18 Jahre alt ist

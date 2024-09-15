@@ -1,7 +1,7 @@
 package resource;
 
-public class SetTopBox extends Resource {
 //Dachträger
+public class SetTopBox extends Resource {
 	public SetTopBox(int id, String name) {
 		super(id, name);
 		// TODO Auto-generated constructor stub

@@ -1,5 +1,7 @@
 package resource;
 
+
+//Ausstattung: ZUsätzlicher Fahrer buchen
 public class AdditionalDriverDecorator extends ResourceDecorator {
 	private String driverName;
 	private int driverAge;

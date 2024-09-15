@@ -1,5 +1,6 @@
 package resource;
 
+//Upgrade zu einem Luxusfahrzeug. Beispiel aus A3 wird A8
 public class LuxuryCarDecorator extends ResourceDecorator {
 
     private String selectedLuxuryModel;

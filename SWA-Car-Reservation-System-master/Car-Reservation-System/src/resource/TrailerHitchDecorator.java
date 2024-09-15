@@ -1,9 +1,9 @@
 package resource;
-
-public class TrailerHitchDecorator extends ResourceDecorator{
-    public TrailerHitchDecorator(Resource resource) {
-    	super(resource);
-    }
+//Ausstattung: Anhängerkupplung
+public class TrailerHitchDecorator extends ResourceDecorator {
+	public TrailerHitchDecorator(Resource resource) {
+		super(resource);
+	}
 
 	@Override
 	public String getDescription() {
@@ -16,6 +16,5 @@ public class TrailerHitchDecorator extends ResourceDecorator{
 		// TODO Auto-generated method stub
 		return super.getPrice() + 59.99;
 	}
-    
-    
+
 }

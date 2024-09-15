@@ -1,5 +1,6 @@
 package resource;
 
+//Fahrradträger für das Heck
 public class BicycleRackDecorator extends ResourceDecorator {
 
 	public BicycleRackDecorator(Resource resource) {

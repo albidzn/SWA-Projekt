@@ -1,7 +1,8 @@
 package resource;
 
+//Ausstattung: NAvi mit neumodernem CarPLay etc
 public class NaviDecorator extends ResourceDecorator {
-	
+
 	public NaviDecorator(Resource resource) {
 		super(resource);
 	}

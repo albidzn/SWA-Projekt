@@ -5,7 +5,9 @@ public abstract class FactoryPerson {
     public abstract Person createPerson(String fname, String lname, String email, String phoneNumber, String address, String... additionalParams);
 }
 
-/* // Concrete Factory für NaturalPerson
+
+
+/* // Factory für NaturalPerson bauen, geswitched zu einer separaten KLasse
 public class NaturalPersonFactory extends FactoryPerson {
     @Override
     public Person createPerson(String fname, String lname, String email, String phoneNumber, String address, String... additionalParams) {
@@ -13,7 +15,7 @@ public class NaturalPersonFactory extends FactoryPerson {
     }
 }
 
-// Concrete Factory für LegalPerson
+//  Factory für LegalPerson geswitched zu separaten KLasse
 public class LegalPersonFactory extends FactoryPerson {
     @Override
     public Person createPerson(String fname, String lname, String email, String phoneNumber, String address, String... additionalParams) {

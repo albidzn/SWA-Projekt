@@ -9,13 +9,14 @@ public class LegalPerson extends Person {
 
 	public LegalPerson(String fname, String lname, String email, String phoneNumber, String address, String companyName,
 			String registrationNumber, String taxNumber) {
-		super(fname, lname, email, phoneNumber, address); // Übergabe aller erforderlichen Parameter an den Superkonstruktor
+		super(fname, lname, email, phoneNumber, address); // Übergabe aller erforderlichen Parameter an den
+															// Superkonstruktor
 		this.companyName = companyName;
 		this.registrationNumber = registrationNumber;
 		this.taxNumber = taxNumber;
 	}
-	
-	//Konstruktorüberladung sehe notizen, relevant wegen Daten
+
+	// Konstruktorüberladung sehe notizen, relevant wegen Daten
 
 	public String getRegistrationNumber() {
 		return registrationNumber;
