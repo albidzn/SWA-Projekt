@@ -31,6 +31,6 @@ public class Car extends Resource {
 
 	@Override
 	public double getPrice() {
-		return 50.00; // Möglicher Basispreis
+		return 50.00; //Basispreis
 	}
 }

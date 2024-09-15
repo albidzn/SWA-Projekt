@@ -1,256 +1,265 @@
 package application;
 
+import person.*;
+import resource.*;
+
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import advertising.AdvertisingSystem;
-import advertising.MessagingSystem;
-import booking.Booking;
-import booking.BookingService;
-import booking.EnglishBooking;
-import booking.Fahrzeug;
-import booking.GermanBooking;
-import booking.InsuranceDetails;
-import booking.PriceDetails;
-import person.Person;
-import person.PersonFactory;
-import person.PersonService;
-import resource.AdditionalDriver;
-import resource.Car;
-import resource.ChildSeat;
-import resource.Navi;
-import resource.Resource;
-import resource.ResourceService;
-import resource.SetTopBox;
-import resource.TrailerHitch;
-
 public class Main {
-	private static PersonService personService = new PersonService();
-	private static ResourceService resourceService = new ResourceService();
-	private static BookingService bookingService = new BookingService();
-	private static Scanner scanner = new Scanner(System.in);
 
-	public static void main(String[] args) {
-		// Messaging System und Advertising System erstellen
-		MessagingSystem messagingSystem = new MessagingSystem();
-		AdvertisingSystem advertisingSystem = new AdvertisingSystem(messagingSystem);
+    public static void main(String[] args) {
+        PersonService personService = new PersonService();
+        ResourceService resourceService = new ResourceService();
+        Scanner scanner = new Scanner(System.in);
+        boolean running = true;
 
-		// BookingService erstellen
-		BookingService bookingService = new BookingService();
+        // Hauptschleife der Anwendung
+        while (running) {
+            System.out.println("\n--- Car Reservation System ---");
+            System.out.println("1. Person erstellen");
+            System.out.println("2. Ressourcen hinzufügen");
+            System.out.println("3. Ressourcen löschen");
+            System.out.println("4. Alle Personen anzeigen");
+            System.out.println("5. Alle Ressourcen anzeigen");
+            System.out.println("6. Beenden");
 
-		// Registriere das Advertising System als Observer beim Booking Service
-		bookingService.registerObserver(advertisingSystem);
+            int choice = 0;
 
-		boolean exit = false;
+            // Eingabevalidierung für die Auswahl
+            try {
+                choice = scanner.nextInt();
+                scanner.nextLine();  // Verarbeitet Zeilenumbruch
+            } catch (InputMismatchException e) {
+                System.out.println("Ungültige Eingabe! Bitte eine Zahl eingeben.");
+                scanner.nextLine(); // Scanner-Fehlerpuffer löschen
+                continue;  // Schleife erneut starten
+            }
 
-		while (!exit) {
-			printMainMenu();
-			int mainChoice = scanner.nextInt();
-			scanner.nextLine(); // consume the newline
+            switch (choice) {
+                case 1:
+                    createPerson(scanner, personService);
+                    break;
+                case 2:
+                    addResource(scanner, resourceService);
+                    break;
+                case 3:
+                    deleteResource(scanner, resourceService);
+                    break;
+                case 4:
+                    displayPersons(personService);
+                    break;
+                case 5:
+                    displayResources(resourceService);
+                    break;
+                case 6:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Ungültige Auswahl! Bitte versuchen Sie es erneut.");
+            }
+        }
 
-			switch (mainChoice) {
-			case 1:
-				handlePersonMenu();
-				break;
-			case 2:
-				handleResourceMenu();
-				break;
-			case 3:
-				handleBookingMenu();
-				break;
-			case 4:
-				exit = true;
-				System.out.println("Programm wird beendet.");
-				break;
-			default:
-				System.out.println("Ungültige Auswahl.");
-			}
-		}
-	}
+        scanner.close();
+        System.out.println("Programm beendet.");
+    }
 
-	private static void printMainMenu() {
-		System.out.println("Wählen Sie eine Option:");
-		System.out.println("1. Personenverwaltung");
-		System.out.println("2. Ressourcenverwaltung");
-		System.out.println("3. Buchung erstellen");
-		System.out.println("4. Beenden");
-		System.out.print("Ihre Auswahl: ");
-	}
+    // Methode zum Erstellen einer Person mit Validierungen
+    private static void createPerson(Scanner scanner, PersonService personService) {
+        System.out.println("Geben Sie den Personentyp ein (1: NaturalPerson, 2: LegalPerson):");
+        int personType = 0;
 
-	// Methoden zur Personenverwaltung
-	private static void handlePersonMenu() {
-		System.out.println("Wählen Sie eine Option:");
-		System.out.println("1. Person hinzufügen");
-		System.out.println("2. Person löschen");
-		System.out.println("3. Alle Personen anzeigen");
-		System.out.println("4. Zurück zum Hauptmenü");
+        // Validierung der Eingabe für den Personentyp
+        while (true) {
+            try {
+                personType = scanner.nextInt();
+                scanner.nextLine();  // Verarbeitet Zeilenumbruch
+                if (personType == 1 || personType == 2) {
+                    break;
+                } else {
+                    System.out.println("Ungültige Auswahl! Bitte geben Sie 1 oder 2 ein.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Ungültige Eingabe! Bitte eine Zahl eingeben.");
+                scanner.nextLine(); // Scanner-Fehlerpuffer löschen
+            }
+        }
 
-		int choice = scanner.nextInt();
-		scanner.nextLine(); // Consume the newline character
+        // Name validieren
+        String fname = "";
+        String lname = "";
+        while (true) {
+            System.out.println("Geben Sie Ihren Vornamen ein:");
+            fname = scanner.nextLine();
+            if (isValidName(fname)) {
+                break;
+            } else {
+                System.out.println("Ungültiger Vorname. Bitte keine Zahlen oder Sonderzeichen verwenden.");
+            }
+        }
 
-		switch (choice) {
-		case 1:
-			System.out.println("Geben Sie den Personentyp ein (natural/legal): ");
-			String type = scanner.nextLine();
+        while (true) {
+            System.out.println("Geben Sie Ihren Nachnamen ein:");
+            lname = scanner.nextLine();
+            if (isValidName(lname)) {
+                break;
+            } else {
+                System.out.println("Ungültiger Nachname. Bitte keine Zahlen oder Sonderzeichen verwenden.");
+            }
+        }
 
-			System.out.println("Geben Sie den Namen ein: ");
-			String name = scanner.nextLine();
+        // Email validieren
+        String email = "";
+        while (true) {
+            System.out.println("Geben Sie die Email ein:");
+            email = scanner.nextLine();
+            if (isValidEmail(email)) {
+                break;
+            } else {
+                System.out.println("Ungültige Email-Adresse. Bitte geben Sie eine gültige Email ein.");
+            }
+        }
 
-			System.out.println("Geben Sie die Adresse ein: ");
-			String address = scanner.nextLine();
+        // Telefonnummer validieren
+        String phoneNumber = "";
+        while (true) {
+            System.out.println("Geben Sie Ihre Telefonnummer ein inkl. Landesvorwahl:");
+            phoneNumber = scanner.nextLine();
+            if (isValidphoneNumber(phoneNumber)) {
+                break;
+            } else {
+                System.out.println("Ungültige Telefonnummer. Bitte geben Sie eine gültige Telefonnummer ein.");
+            }
+        }
 
-			String extraInfo1 = "", extraInfo2 = "";
-			if ("natural".equalsIgnoreCase(type)) {
-				System.out.println("Geben Sie das Geburtsdatum ein: ");
-				extraInfo1 = scanner.nextLine();
+        System.out.println("Geben Sie die Adresse ein:");
+        String address = scanner.nextLine();
 
-				System.out.println("Geben Sie die Führerscheinnummer ein: ");
-				extraInfo2 = scanner.nextLine();
-			} else if ("legal".equalsIgnoreCase(type)) {
-				System.out.println("Geben Sie die Handelsregisternummer ein: ");
-				extraInfo1 = scanner.nextLine();
-				System.out.println("Geben Sie die Steuernummer ein: ");
-				extraInfo2 = scanner.nextLine();
-			}
+        if (personType == 1) {
+            // Natürliche Person erstellen
+            System.out.println("Geben Sie das Geburtsdatum ein (yyyy-MM-dd):");
+            String birthDate = scanner.nextLine();
+            FactoryPerson factory = new NaturalPersonFactory();
+            personService.createPerson(factory, fname, lname, email, phoneNumber, address, birthDate);
+            System.out.println("Natürliche Person erstellt!");
+        } else if (personType == 2) {
+            // Juristische Person erstellen
+            System.out.println("Geben Sie den Firmennamen ein:");
+            String companyName = scanner.nextLine();
+            System.out.println("Geben Sie die Registrierungsnummer ein:");
+            String registrationNumber = scanner.nextLine();
+            System.out.println("Geben Sie die Steuernummer ein:");
+            String taxNumber = scanner.nextLine();
+            FactoryPerson factory = new LegalPersonFactory();
+            personService.createPerson(factory, fname, lname, email, phoneNumber, address, companyName, registrationNumber, taxNumber);
+            System.out.println("Juristische Person erstellt!");
+        }
+    }
 
-			Person person = PersonFactory.createPerson(type, name, address, extraInfo1, extraInfo2);
-			if (person != null) {
-				personService.addPerson(person);
-				System.out.println("Person hinzugefügt: " + person.getName());
-			} else {
-				System.out.println("Ungültiger Personentyp!");
-			}
-			break;
-		case 2:
-			System.out.println("Geben Sie den Namen der zu löschenden Person ein: ");
-			String nameToDelete = scanner.nextLine();
-			personService.deletePerson(nameToDelete);
-			System.out.println("Person gelöscht (falls vorhanden).");
-			break;
-		case 3:
-			System.out.println("Aktuelle Personen:");
-			personService.displayPersons();
-			break;
-		case 4:
-			return; // Zurück zum Hauptmenü
-		default:
-			System.out.println("Ungültige Auswahl.");
-		}
-	}
+    // Methode zum Hinzufügen einer Ressource mit Eingabevalidierung
+    private static void addResource(Scanner scanner, ResourceService resourceService) {
+        int resourceType = 0;
+        int id = 0;
 
-	// Methoden zur Ressourcenverwaltung
-	private static void handleResourceMenu() {
-		System.out.println("Wählen Sie eine Option:");
-		System.out.println("1. Ressource hinzufügen");
-		System.out.println("2. Ressource löschen");
-		System.out.println("3. Alle Ressourcen anzeigen");
-		System.out.println("4. Zurück zum Hauptmenü");
+        // Validierung für den Ressourcentyp
+        while (true) {
+            try {
+                System.out.println("Geben Sie den Ressourcentyp ein (1: Car, 2: SetTopBox, 3: ChildSeat):");
+                resourceType = scanner.nextInt();
+                scanner.nextLine();  // Verarbeitet Zeilenumbruch
+                if (resourceType >= 1 && resourceType <= 3) {
+                    break;
+                } else {
+                    System.out.println("Ungültiger Ressourcentyp. Bitte eine Zahl zwischen 1 und 3 eingeben.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Ungültige Eingabe. Bitte geben Sie eine Zahl ein.");
+                scanner.nextLine();  // Scanner-Fehlerpuffer löschen
+            }
+        }
 
-		int choice = scanner.nextInt();
-		scanner.nextLine(); // Consume the newline character
+        // Validierung für die ID
+        while (true) {
+            try {
+                System.out.println("Geben Sie die ID ein:");
+                id = scanner.nextInt();
+                scanner.nextLine();  // Verarbeitet Zeilenumbruch
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Ungültige Eingabe. Bitte geben Sie eine gültige Zahl für die ID ein.");
+                scanner.nextLine();  // Scanner-Fehlerpuffer löschen
+            }
+        }
 
-		switch (choice) {
-		case 1:
-			System.out.println("Geben Sie die Ressource ein (car, childseat, settopbox): ");
-			String resourceType = scanner.nextLine();
+        System.out.println("Geben Sie den Namen der Ressource ein:");
+        String resourceName = scanner.nextLine();
 
-			Resource resource;
-			switch (resourceType.toLowerCase()) {
-			case "car":
-				resource = new Car();
-				break;
-			case "childseat":
-				resource = new ChildSeat(new Car());
-				break;
-			case "settopbox":
-				resource = new SetTopBox(new Car());
-				break;
-			default:
-				System.out.println("Ungültiger Ressourcentyp!");
-				return;
-			}
+        Resource resource = null;
+        if (resourceType == 1) {
+            resource = new Car(id, resourceName);
 
-			System.out.println(
-					"Möchten Sie zusätzliche Optionen hinzufügen (navi, trailerhitch, additionaldriver)? (y/n)");
-			String addOptions = scanner.nextLine();
+            // Option für ein Upgrade auf Luxusfahrzeug anbieten
+            System.out.println("Möchten Sie ein Upgrade auf ein Luxusauto? (1: Ja, 0: Nein)");
+            int upgradeChoice = scanner.nextInt();
+            if (upgradeChoice == 1) {
+                resource = new LuxuryCarDecorator(resource);
+            }
+        } else if (resourceType == 2) {
+            resource = new SetTopBox(id, resourceName);
+        } else if (resourceType == 3) {
+            resource = new ChildSeat(id, resourceName);
+        }
 
-			if (addOptions.equalsIgnoreCase("y")) {
-				System.out.println("Geben Sie die gewünschten Optionen ein (navi, trailerhitch, additionaldriver): ");
-				String option = scanner.nextLine();
-				switch (option.toLowerCase()) {
-				case "navi":
-					resource = new Navi(resource);
-					break;
-				case "trailerhitch":
-					resource = new TrailerHitch(resource);
-					break;
-				case "additionaldriver":
-					System.out.println("Geben Sie das Alter des zusätzlichen Fahrers ein: ");
-					int age = scanner.nextInt();
-					scanner.nextLine(); // consume newline
-					resource = new AdditionalDriver(resource, age);
-					break;
-				default:
-					System.out.println("Ungültige Option!");
-					return;
-				}
-			}
+        if (resource != null) {
+            resourceService.addResource(resource);
+            System.out.println("Ressource hinzugefügt!");
+        } else {
+            System.out.println("Ungültige Ressourcenauswahl.");
+        }
+    }
 
-			resourceService.addResource(resource);
-			System.out.println("Ressource hinzugefügt: " + resource.getDescription());
-			break;
-		case 2:
-			System.out.println("Geben Sie die ID der Ressource ein, die Sie löschen möchten: ");
-			String resourceID = scanner.nextLine();
-			Resource resourceToDelete = resourceService.getSelectedResource(resourceID);
-			if (resourceToDelete != null) {
-				resourceService.removeResource(resourceToDelete);
-				System.out.println("Ressource gelöscht: " + resourceToDelete.getDescription());
-			} else {
-				System.out.println("Ressource mit dieser ID nicht gefunden.");
-			}
-			break;
-		case 3:
-			System.out.println("Aktuelle Ressourcen:");
-			for (Resource res : resourceService.getResources()) {
-				System.out.println(res.getDescription() + " kostet: " + res.getCost());
-			}
-			break;
-		case 4:
-			return; // Zurück zum Hauptmenü
-		default:
-			System.out.println("Ungültige Auswahl.");
-		}
-	}
+    // Methode zum Löschen einer Ressource
+    private static void deleteResource(Scanner scanner, ResourceService resourceService) {
+        int deleteId = 0;
+        while (true) {
+            try {
+                System.out.println("Geben Sie die ID der zu löschenden Ressource ein:");
+                deleteId = scanner.nextInt();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Ungültige Eingabe. Bitte geben Sie eine Zahl ein.");
+                scanner.nextLine();  // Fehlerpuffer löschen
+            }
+        }
+        resourceService.deleteResource(deleteId);
+        System.out.println("Ressource gelöscht.");
+    }
 
-	// Methoden zur Buchungserstellung
-	private static void handleBookingMenu() {
-		System.out.println("Wählen Sie die Sprache für die Buchung (de/en): ");
-		String language = scanner.nextLine();
+    // Methode zum Anzeigen aller Personen
+    private static void displayPersons(PersonService personService) {
+        System.out.println("\n--- Personenliste ---");
+        personService.displayPersons();
+    }
 
-		Booking booking;
-		if ("de".equalsIgnoreCase(language)) {
-			booking = new GermanBooking();
-		} else if ("en".equalsIgnoreCase(language)) {
-			booking = new EnglishBooking();
-		} else {
-			System.out.println("Ungültige Spracheingabe.");
-			return;
-		}
+    // Methode zum Anzeigen aller Ressourcen
+    private static void displayResources(ResourceService resourceService) {
+        System.out.println("\n--- Ressourcenliste ---");
+        resourceService.displayResources();
+    }
 
-		// Fahrzeug erstellen
-		Fahrzeug vehicle = new Fahrzeug.Builder().setKategorie("Kompaktklasse").setModell("VW Golf").setAutomatik(true)
-				.setKlimaanlage(true).setNavigationssystem(true).build();
+    // Validierungsmethoden
 
-		// PreisDetails erstellen
-		PriceDetails priceDetails = new PriceDetails.Builder().setMietpreis(200.0).setSteuern(20.0).setGebuehren(15.0)
-				.setAnzahlung(50.0).build();
+    private static boolean isValidphoneNumber(String phoneNumber) {
+        return phoneNumber.matches("[0-9+]+") && phoneNumber.length() >= 10; // Mindestlänge 10 Ziffern
+    }
 
-		// VersicherungsDetails erstellen
-		InsuranceDetails insuranceDetails = new InsuranceDetails.Builder().setVollkasko(true)
-				.setSelbstbeteiligung(500.0).setHaftpflicht(true).setDiebstahlschutz(true).build();
+    // Methode zur Validierung von Namen (keine Zahlen oder Sonderzeichen)
+    private static boolean isValidName(String name) {
+        return name.matches("[a-zA-ZäöüßÄÖÜ]+");
+    }
 
-		// Buchung erstellen und anzeigen
-		String bookingDetails = bookingService.createBooking(booking, vehicle, priceDetails, insuranceDetails);
-		System.out.println("Buchungsdetails:\n" + bookingDetails);
-	}
+    // Methode zur Validierung der E-Mail-Adresse (muss ein @ enthalten)
+    private static boolean isValidEmail(String email) {
+        return email.contains("@");
+    }
 }
